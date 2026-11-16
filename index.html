@@ -5,7 +5,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#080808">
+
 <title>KKK — Esports</title>
+<meta name="description" content="KKK Esports — Independent Dota 2 team from the CIS region. Five players. One direction.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="KKK — Esports">
+<meta property="og:description" content="Independent Dota 2 team. Not yet competing. Already here.">
+<meta property="og:url" content="https://fin1key.github.io/kkk/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="KKK — Esports">
+<meta name="twitter:description" content="Independent Dota 2 team from the CIS region.">
+
+<link rel="canonical" href="https://fin1key.github.io/kkk/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23080808'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial,sans-serif' font-weight='900' font-size='37' fill='%23ededed'%3EK%3C/text%3E%3C/svg%3E">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,6 +50,69 @@ button {font:inherit}
 ::selection {background:#eee;color:#080808}
 
 .container {width:min(1280px,90%);margin:auto}
+
+/* PRELOADER */
+
+.preloader {
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#080808;
+  transition:opacity .65s ease,visibility .65s ease;
+}
+
+.preloader.hidden {
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+
+.preloader-content {
+  width:min(340px,75%);
+  text-align:center;
+}
+
+.preloader-logo {
+  font-family:var(--display);
+  font-size:100px;
+  line-height:.85;
+  font-weight:900;
+  letter-spacing:-5px;
+}
+
+.preloader-logo span {color:#666}
+
+.preloader-caption {
+  margin-top:22px;
+  color:#777;
+  font-size:9px;
+  letter-spacing:3px;
+}
+
+.preloader-line {
+  width:100%;
+  height:1px;
+  background:#292929;
+  margin-top:35px;
+  overflow:hidden;
+}
+
+.preloader-line span {
+  display:block;
+  width:100%;
+  height:100%;
+  background:#ddd;
+  transform:scaleX(0);
+  transform-origin:left;
+  animation:loadLine 1.15s cubic-bezier(.65,0,.35,1) forwards;
+}
+
+@keyframes loadLine {
+  to {transform:scaleX(1)}
+}
 
 /* BACKGROUND ATMOSPHERE */
 
@@ -171,7 +246,7 @@ header {
 
 .nav-links a:hover {color:white}
 
-.nav-right {display:flex;align-items:center;gap:20px}
+.nav-right {display:flex;align-items:center;gap:15px}
 
 .region {
   font-size:9px;
@@ -199,6 +274,38 @@ header {
 .language button.active {
   background:#eee;
   color:#080808;
+}
+
+.sound-toggle {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  border:1px solid var(--line);
+  background:transparent;
+  color:#999;
+  padding:10px 11px;
+  font-size:9px;
+  letter-spacing:1.3px;
+  cursor:pointer;
+  transition:.25s;
+}
+
+.sound-toggle:hover {
+  color:#fff;
+  border-color:#777;
+}
+
+.sound-dot {
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#777;
+  transition:.2s;
+}
+
+.sound-toggle.enabled .sound-dot {
+  background:#ddd;
+  box-shadow:0 0 8px rgba(255,255,255,.5);
 }
 
 .menu-btn {
@@ -417,12 +524,34 @@ section {
   background:
     radial-gradient(ellipse at 50% 35%,#333,transparent 70%),
     linear-gradient(145deg,#202020,#101010);
-  transition:transform .4s,border-color .4s;
+  transition:transform .45s cubic-bezier(.2,.8,.2,1),border-color .4s,box-shadow .4s;
+}
+
+.player::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  opacity:0;
+  background:linear-gradient(125deg,transparent 25%,rgba(255,255,255,.09) 48%,transparent 70%);
+  transform:translateX(-100%);
+  transition:opacity .3s;
 }
 
 .player:hover {
-  transform:translateY(-8px);
-  border-color:rgba(255,255,255,.55);
+  transform:translateY(-9px);
+  border-color:rgba(255,255,255,.6);
+  box-shadow:0 15px 40px rgba(0,0,0,.35),inset 0 0 25px rgba(255,255,255,.035);
+}
+
+.player:hover::before {
+  opacity:1;
+  animation:playerSheen .8s ease forwards;
+}
+
+@keyframes playerSheen {
+  to {transform:translateX(100%)}
 }
 
 .player-art {
@@ -439,7 +568,7 @@ section {
 }
 
 .player:hover .player-art {
-  transform:scale(1.07);
+  transform:scale(1.075);
   filter:grayscale(1) contrast(1.15) brightness(1.08);
 }
 
@@ -480,7 +609,10 @@ section {
   left:17px;
   right:12px;
   z-index:2;
+  transition:transform .4s;
 }
+
+.player:hover .player-info {transform:translateY(-4px)}
 
 .player-nick {
   font-family:var(--display);
@@ -719,64 +851,77 @@ section {
   max-width:270px;
 }
 
-/* ARCHIVE */
+/* CONTACT */
 
-.archive-grid {
+.contact-section {
+  background:
+    radial-gradient(ellipse at 80% 20%,rgba(255,255,255,.055),transparent 40%),
+    linear-gradient(145deg,#111,#090909);
+}
+
+.contact-layout {
   display:grid;
-  grid-template-columns:1.4fr 1fr;
-  gap:14px;
+  grid-template-columns:1fr 1fr;
+  gap:70px;
+  align-items:end;
 }
 
-.archive-card {
-  min-height:280px;
-  border:1px solid var(--line);
-  background:
-    radial-gradient(ellipse at 80% 20%,rgba(255,255,255,.07),transparent 45%),
-    linear-gradient(145deg,#202020,#101010 65%,#090909);
-  padding:30px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  position:relative;
-  overflow:hidden;
-  transition:.3s;
-}
-
-.archive-card:hover {
-  border-color:#777;
-  background:
-    radial-gradient(ellipse at 80% 20%,rgba(255,255,255,.13),transparent 45%),
-    linear-gradient(145deg,#292929,#111 65%,#080808);
-}
-
-.archive-card:first-child {min-height:350px}
-
-.archive-tag {
-  font-size:9px;
-  letter-spacing:2px;
-  color:#888;
-}
-
-.archive-card h3 {
+.contact-copy h2 {
   font-family:var(--display);
-  font-size:clamp(35px,5vw,60px);
-  line-height:.9;
+  font-size:clamp(55px,8vw,100px);
+  line-height:.82;
+  font-weight:800;
   text-transform:uppercase;
 }
 
-.archive-card p {
+.contact-copy p {
+  margin-top:25px;
+  max-width:420px;
   color:#888;
-  font-size:11px;
-  line-height:1.8;
-  margin-top:15px;
-  max-width:430px;
+  font-size:12px;
+  line-height:2;
 }
 
-.archive-date {
-  color:#666;
+.contact-items {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.contact-item {
+  min-height:145px;
+  padding:22px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.018);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  transition:.3s;
+}
+
+.contact-item:hover {
+  border-color:#777;
+  background:rgba(255,255,255,.045);
+  transform:translateY(-4px);
+}
+
+.contact-item-label {
+  color:#777;
   font-size:9px;
   letter-spacing:2px;
-  margin-top:25px;
+}
+
+.contact-item-value {
+  font-family:var(--display);
+  font-size:27px;
+  font-weight:700;
+  text-transform:uppercase;
+}
+
+.contact-item-status {
+  color:#666;
+  font-size:8px;
+  letter-spacing:1.5px;
 }
 
 /* FOOTER */
@@ -884,6 +1029,7 @@ footer {
   .roster-grid {grid-template-columns:repeat(3,minmax(0,1fr))}
   .player {height:440px}
   .statement-layout {gap:35px}
+  .contact-layout {gap:35px}
 }
 
 @media(max-width:750px) {
@@ -905,6 +1051,9 @@ footer {
   .nav-links.open {display:flex}
   .menu-btn {display:block}
   .region {display:none}
+
+  .nav-right {gap:9px}
+  .sound-toggle {padding:10px 8px}
 
   .hero {min-height:680px}
   .hero h1 {letter-spacing:-5px}
@@ -928,8 +1077,7 @@ footer {
   .principles-grid {grid-template-columns:1fr}
   .principle {min-height:205px}
 
-  .archive-grid {grid-template-columns:1fr}
-  .archive-card:first-child {min-height:300px}
+  .contact-layout {grid-template-columns:1fr;gap:40px}
 
   .status-card {padding:25px}
   .footer-top {align-items:flex-start;flex-direction:column}
@@ -942,6 +1090,14 @@ footer {
   .hero {min-height:600px}
   .hero h1 {font-size:130px}
   .hero-bottom {gap:20px}
+
+  .nav-right {gap:6px}
+  .sound-toggle {font-size:8px;letter-spacing:.7px;padding:9px 7px}
+  .language {padding:3px}
+  .language button {padding:7px}
+
+  .contact-items {grid-template-columns:1fr}
+  .contact-item {min-height:115px}
 
   .status-grid {grid-template-columns:1fr}
   .status-item,.status-item:not(:first-child) {
@@ -967,6 +1123,15 @@ footer {
 </head>
 
 <body>
+
+<!-- PRELOADER -->
+<div class="preloader" id="preloader">
+  <div class="preloader-content">
+    <div class="preloader-logo">KKK<span>.</span></div>
+    <div class="preloader-caption">INITIALIZING / EST. 2026</div>
+    <div class="preloader-line"><span></span></div>
+  </div>
+</div>
 
 <div class="scroll-progress" id="scrollProgress"></div>
 <canvas id="rain"></canvas>
@@ -996,15 +1161,23 @@ footer {
       <a href="#statement" data-i18n="navAbout">Statement</a>
       <a href="#status" data-i18n="navStatus">Status</a>
       <a href="#principles" data-i18n="navPrinciples">Principles</a>
-      <a href="#archive" data-i18n="navArchive">Archive</a>
+      <a href="#contact" data-i18n="navContact">Contact</a>
     </nav>
 
     <div class="nav-right">
       <div class="region">DOTA 2 / CIS</div>
+
       <div class="language">
         <button id="enBtn" class="active" onclick="setLanguage('en')">EN</button>
         <button id="ruBtn" onclick="setLanguage('ru')">RU</button>
       </div>
+
+      <button class="sound-toggle enabled" id="soundToggle" type="button"
+        onclick="toggleSound()" aria-pressed="true">
+        <span class="sound-dot"></span>
+        <span id="soundLabel">SOUND ON</span>
+      </button>
+
       <button class="menu-btn" onclick="toggleMenu()">MENU</button>
     </div>
   </div>
@@ -1033,7 +1206,7 @@ footer {
     </div>
   </div>
 
-  <div class="hero-index">01 / 06 — TEAM OVERVIEW</div>
+  <div class="hero-index">01 / 05 — TEAM OVERVIEW</div>
 </section>
 
 <!-- ROSTER -->
@@ -1256,43 +1429,44 @@ footer {
   </div>
 </section>
 
-<!-- ARCHIVE -->
-<section id="archive">
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
   <div class="container">
 
     <div class="section-head reveal">
       <div>
-        <div class="section-label" data-i18n="archiveLabel">05 — The archive</div>
-        <h2 class="section-title" data-i18n="archiveTitle">First chapter</h2>
+        <div class="section-label" data-i18n="contactLabel">05 — Get in touch</div>
+        <h2 class="section-title" data-i18n="contactTitle">Contact / Links</h2>
       </div>
-      <div class="section-index">DOCUMENT / 001</div>
+      <div class="section-index">KKK ESPORTS / CONNECTIONS</div>
     </div>
 
-    <div class="archive-grid">
+    <div class="contact-layout">
 
-      <article class="archive-card reveal">
-        <div class="archive-tag">DOCUMENT 001 / KKK ESPORTS</div>
-        <div>
-          <h3 data-i18n="archiveMainTitle">Everything<br>starts somewhere.</h3>
-          <p data-i18n="archiveMainText">
-            A new team. A new direction. The first step toward something that has yet to be written.
-          </p>
+      <div class="contact-copy reveal">
+        <h2 data-i18n="contactHeading">Stay<br>connected.</h2>
+        <p data-i18n="contactText">
+          Our official channels are currently being prepared. Team links and contact information will appear here when available.
+        </p>
+      </div>
+
+      <div class="contact-items reveal">
+
+        <div class="contact-item">
+          <div class="contact-item-label">01 / DISCORD</div>
+          <div class="contact-item-value" data-i18n="contactSoon">Coming soon</div>
+          <div class="contact-item-status" data-i18n="contactUnavailable">NOT AVAILABLE YET</div>
         </div>
-        <div class="archive-date">NOVEMBER 2026 / CIS</div>
-      </article>
 
-      <article class="archive-card reveal">
-        <div class="archive-tag">DOCUMENT 002 / ROSTER</div>
-        <div>
-          <h3 data-i18n="archiveSecondTitle">Five names.<br>One identity.</h3>
-          <p data-i18n="archiveSecondText">
-            The current KKK Dota 2 lineup. Five players, five roles.
-          </p>
+        <div class="contact-item">
+          <div class="contact-item-label">02 / SOCIALS</div>
+          <div class="contact-item-value" data-i18n="contactSoon">Coming soon</div>
+          <div class="contact-item-status" data-i18n="contactUnavailable">NOT AVAILABLE YET</div>
         </div>
-        <div class="archive-date">ROSTER / 2026</div>
-      </article>
 
+      </div>
     </div>
+
   </div>
 </section>
 
@@ -1313,7 +1487,7 @@ footer {
         <a href="#statement" data-i18n="navAbout">Statement</a>
         <a href="#status" data-i18n="navStatus">Status</a>
         <a href="#principles" data-i18n="navPrinciples">Principles</a>
-        <a href="#archive" data-i18n="navArchive">Archive</a>
+        <a href="#contact" data-i18n="navContact">Contact</a>
       </div>
     </div>
 
@@ -1325,7 +1499,8 @@ footer {
   </div>
 </footer>
 
-<button class="back-top" id="backTop" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<button class="back-top" id="backTop" aria-label="Back to top"
+  onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script>
 
@@ -1337,7 +1512,7 @@ navRoster:"Roster",
 navAbout:"Statement",
 navStatus:"Status",
 navPrinciples:"Principles",
-navArchive:"Archive",
+navContact:"Contact",
 
 heroEyebrow:"Independent Dota 2 Team",
 heroLine1:"Not yet competing.",
@@ -1386,12 +1561,12 @@ principleTwoText:"Every player has a role. Every role matters. The team comes fi
 principleThreeTitle:"Consistency",
 principleThreeText:"Improvement is not a moment. It is a process that never stops.",
 
-archiveLabel:"05 — The archive",
-archiveTitle:"First chapter",
-archiveMainTitle:"Everything<br>starts somewhere.",
-archiveMainText:"A new team. A new direction. The first step toward something that has yet to be written.",
-archiveSecondTitle:"Five names.<br>One identity.",
-archiveSecondText:"The current KKK Dota 2 lineup. Five players, five roles.",
+contactLabel:"05 — Get in touch",
+contactTitle:"Contact / Links",
+contactHeading:"Stay<br>connected.",
+contactText:"Our official channels are currently being prepared. Team links and contact information will appear here when available.",
+contactSoon:"Coming soon",
+contactUnavailable:"NOT AVAILABLE YET",
 
 footerText:"NOT YET COMPETING. ALREADY HERE."
 },
@@ -1401,7 +1576,7 @@ navRoster:"Состав",
 navAbout:"О команде",
 navStatus:"Статус",
 navPrinciples:"Принципы",
-navArchive:"Архив",
+navContact:"Контакты",
 
 heroEyebrow:"Независимая команда Dota 2",
 heroLine1:"Мы ещё не соревнуемся.",
@@ -1450,12 +1625,12 @@ principleTwoText:"У каждого игрока есть своя роль. К�
 principleThreeTitle:"Постоянство",
 principleThreeText:"Развитие — это не отдельный момент, а непрерывный процесс.",
 
-archiveLabel:"05 — Архив",
-archiveTitle:"Первая глава",
-archiveMainTitle:"У всего<br>есть начало.",
-archiveMainText:"Новая команда. Новое направление. Первый шаг к истории, которую ещё предстоит написать.",
-archiveSecondTitle:"Пять имён.<br>Одна команда.",
-archiveSecondText:"Текущий состав KKK по Dota 2. Пять игроков, пять ролей.",
+contactLabel:"05 — Связь с нами",
+contactTitle:"Контакты",
+contactHeading:"Оставайся<br>на связи.",
+contactText:"Официальные каналы команды пока готовятся. Ссылки и контактная информация появятся здесь, когда будут доступны.",
+contactSoon:"Скоро",
+contactUnavailable:"ПОКА НЕДОСТУПНО",
 
 footerText:"МЫ ЕЩЁ НЕ СОРЕВНУЕМСЯ. НО МЫ УЖЕ ЗДЕСЬ."
 }
@@ -1481,6 +1656,86 @@ try {savedLanguage=localStorage.getItem("kkk-language")||"en"} catch(e){}
 setLanguage(savedLanguage);
 
 
+/* BUTTON SOUND */
+
+let soundEnabled=true;
+let audioContext=null;
+
+try {
+  soundEnabled=localStorage.getItem("kkk-sound")!=="off";
+} catch(e){}
+
+function updateSoundUI() {
+  const toggle=document.getElementById("soundToggle");
+  const label=document.getElementById("soundLabel");
+
+  toggle.classList.toggle("enabled",soundEnabled);
+  toggle.setAttribute("aria-pressed",String(soundEnabled));
+
+  const lang=document.documentElement.lang;
+
+  label.textContent=soundEnabled
+    ? (lang==="ru"?"ЗВУК ВКЛ":"SOUND ON")
+    : (lang==="ru"?"ЗВУК ВЫКЛ":"SOUND OFF");
+}
+
+function toggleSound() {
+  soundEnabled=!soundEnabled;
+
+  try {
+    localStorage.setItem("kkk-sound",soundEnabled?"on":"off");
+  } catch(e){}
+
+  updateSoundUI();
+}
+
+function playUISound(type="normal") {
+  if(!soundEnabled) return;
+
+  try {
+    const AudioContextClass=window.AudioContext||window.webkitAudioContext;
+    if(!AudioContextClass) return;
+
+    if(!audioContext) audioContext=new AudioContextClass();
+
+    if(audioContext.state==="suspended") audioContext.resume();
+
+    const now=audioContext.currentTime;
+    const oscillator=audioContext.createOscillator();
+    const gain=audioContext.createGain();
+
+    const isLanguage=type==="language";
+
+    oscillator.type="sine";
+    oscillator.frequency.setValueAtTime(isLanguage?560:720,now);
+    oscillator.frequency.exponentialRampToValueAtTime(isLanguage?360:470,now+.075);
+
+    gain.gain.setValueAtTime(.0001,now);
+    gain.gain.exponentialRampToValueAtTime(isLanguage?.025:.035,now+.008);
+    gain.gain.exponentialRampToValueAtTime(.0001,now+.095);
+
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
+
+    oscillator.start(now);
+    oscillator.stop(now+.1);
+  } catch(e){}
+}
+
+document.addEventListener("click",event=>{
+  const target=event.target.closest("button, .primary-btn");
+  if(!target) return;
+
+  if(target.id==="enBtn"||target.id==="ruBtn") {
+    playUISound("language");
+  } else {
+    playUISound("normal");
+  }
+});
+
+updateSoundUI();
+
+
 /* MOBILE MENU */
 
 function toggleMenu() {
@@ -1492,6 +1747,27 @@ document.querySelectorAll(".nav-links a").forEach(link=>{
     document.getElementById("navLinks").classList.remove("open");
   });
 });
+
+
+/* PRELOADER */
+
+const preloader=document.getElementById("preloader");
+const reducedMotion=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+
+function hidePreloader() {
+  preloader.classList.add("hidden");
+}
+
+if(reducedMotion) {
+  hidePreloader();
+} else {
+  window.addEventListener("load",()=>{
+    setTimeout(hidePreloader,650);
+  });
+
+  // Fallback in case an external resource loads slowly.
+  setTimeout(hidePreloader,2400);
+}
 
 
 /* SCROLL EFFECTS */
@@ -1623,7 +1899,7 @@ document.addEventListener("visibilitychange",()=>{
   else resumeRain();
 });
 
-if(window.matchMedia("(prefers-reduced-motion:reduce)").matches) {
+if(reducedMotion) {
   pauseRain();
   canvas.style.display="none";
 }
