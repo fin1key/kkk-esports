@@ -527,6 +527,8 @@ section {
   transition:transform .45s cubic-bezier(.2,.8,.2,1),border-color .4s,box-shadow .4s;
 }
 
+/* ORIGINAL SHEEN EFFECT */
+
 .player::before {
   content:"";
   position:absolute;
@@ -538,6 +540,29 @@ section {
   transform:translateX(-100%);
   transition:opacity .3s;
 }
+
+/* CURSOR-TRACKING LIGHT */
+
+.player::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  opacity:0;
+  background:
+    radial-gradient(
+      280px circle at var(--spot-x,50%) var(--spot-y,50%),
+      rgba(255,255,255,.19) 0%,
+      rgba(255,255,255,.075) 32%,
+      rgba(255,255,255,.025) 52%,
+      transparent 75%
+    );
+  mix-blend-mode:screen;
+  transition:opacity .25s ease;
+}
+
+.player.spotlight-active::after {opacity:1}
 
 .player:hover {
   transform:translateY(-9px);
@@ -575,6 +600,7 @@ section {
 .player-overlay {
   position:absolute;
   inset:0;
+  z-index:0;
   background:linear-gradient(180deg,rgba(0,0,0,.1),transparent 40%,rgba(0,0,0,.96));
   pointer-events:none;
 }
@@ -905,6 +931,17 @@ section {
   transform:translateY(-4px);
 }
 
+.contact-item-link {
+  color:inherit;
+  text-decoration:none;
+  cursor:pointer;
+}
+
+.contact-item-link:focus-visible {
+  outline:1px solid #ddd;
+  outline-offset:4px;
+}
+
 .contact-item-label {
   color:#777;
   font-size:9px;
@@ -918,8 +955,20 @@ section {
   text-transform:uppercase;
 }
 
+.contact-item-value span {
+  display:inline-block;
+  font-family:var(--font);
+  font-size:17px;
+  margin-left:5px;
+  transition:transform .25s;
+}
+
+.contact-item-link:hover .contact-item-value span {
+  transform:translate(4px,-4px);
+}
+
 .contact-item-status {
-  color:#666;
+  color:#888;
   font-size:8px;
   letter-spacing:1.5px;
 }
@@ -1436,7 +1485,7 @@ footer {
     <div class="section-head reveal">
       <div>
         <div class="section-label" data-i18n="contactLabel">05 — Get in touch</div>
-        <h2 class="section-title" data-i18n="contactTitle">Contact / Links</h2>
+        <h2 class="section-title" data-i18n="contactTitle">Contact / Discord</h2>
       </div>
       <div class="section-index">KKK ESPORTS / CONNECTIONS</div>
     </div>
@@ -1446,20 +1495,28 @@ footer {
       <div class="contact-copy reveal">
         <h2 data-i18n="contactHeading">Stay<br>connected.</h2>
         <p data-i18n="contactText">
-          Our official channels are currently being prepared. Team links and contact information will appear here when available.
+          Join our Discord community. Information for team inquiries will appear here when available.
         </p>
       </div>
 
       <div class="contact-items reveal">
 
-        <div class="contact-item">
-          <div class="contact-item-label">01 / DISCORD</div>
-          <div class="contact-item-value" data-i18n="contactSoon">Coming soon</div>
-          <div class="contact-item-status" data-i18n="contactUnavailable">NOT AVAILABLE YET</div>
-        </div>
+        <a class="contact-item contact-item-link"
+          href="https://discord.gg/8HZjFxYWB"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Join KKK Esports Discord">
+
+          <div class="contact-item-label" data-i18n="contactDiscordLabel">01 / DISCORD</div>
+          <div class="contact-item-value">
+            <span data-i18n="contactDiscord">Join Discord</span>
+            <span aria-hidden="true">↗</span>
+          </div>
+          <div class="contact-item-status" data-i18n="contactDiscordStatus">OPEN COMMUNITY SERVER</div>
+        </a>
 
         <div class="contact-item">
-          <div class="contact-item-label">02 / SOCIALS</div>
+          <div class="contact-item-label" data-i18n="contactTeamLabel">02 / TEAM INQUIRIES</div>
           <div class="contact-item-value" data-i18n="contactSoon">Coming soon</div>
           <div class="contact-item-status" data-i18n="contactUnavailable">NOT AVAILABLE YET</div>
         </div>
@@ -1562,9 +1619,13 @@ principleThreeTitle:"Consistency",
 principleThreeText:"Improvement is not a moment. It is a process that never stops.",
 
 contactLabel:"05 — Get in touch",
-contactTitle:"Contact / Links",
+contactTitle:"Contact / Discord",
 contactHeading:"Stay<br>connected.",
-contactText:"Our official channels are currently being prepared. Team links and contact information will appear here when available.",
+contactText:"Join our Discord community. Information for team inquiries will appear here when available.",
+contactDiscordLabel:"01 / DISCORD",
+contactDiscord:"Join Discord",
+contactDiscordStatus:"OPEN COMMUNITY SERVER",
+contactTeamLabel:"02 / TEAM INQUIRIES",
 contactSoon:"Coming soon",
 contactUnavailable:"NOT AVAILABLE YET",
 
@@ -1626,9 +1687,13 @@ principleThreeTitle:"Постоянство",
 principleThreeText:"Развитие — это не отдельный момент, а непрерывный процесс.",
 
 contactLabel:"05 — Связь с нами",
-contactTitle:"Контакты",
+contactTitle:"Контакты / Discord",
 contactHeading:"Оставайся<br>на связи.",
-contactText:"Официальные каналы команды пока готовятся. Ссылки и контактная информация появятся здесь, когда будут доступны.",
+contactText:"Присоединяйся к нашему Discord-сообществу. Информация для связи с командой появится здесь, когда будет готова.",
+contactDiscordLabel:"01 / DISCORD",
+contactDiscord:"Войти в Discord",
+contactDiscordStatus:"ОТКРЫТЬ СЕРВЕР СООБЩЕСТВА",
+contactTeamLabel:"02 / СВЯЗЬ С КОМАНДОЙ",
 contactSoon:"Скоро",
 contactUnavailable:"ПОКА НЕДОСТУПНО",
 
@@ -1728,6 +1793,7 @@ document.addEventListener("click",event=>{
 
   if(target.id==="enBtn"||target.id==="ruBtn") {
     playUISound("language");
+    updateSoundUI();
   } else {
     playUISound("normal");
   }
@@ -1761,9 +1827,13 @@ function hidePreloader() {
 if(reducedMotion) {
   hidePreloader();
 } else {
-  window.addEventListener("load",()=>{
+  if(document.readyState==="complete") {
     setTimeout(hidePreloader,650);
-  });
+  } else {
+    window.addEventListener("load",()=>{
+      setTimeout(hidePreloader,650);
+    });
+  }
 
   // Fallback in case an external resource loads slowly.
   setTimeout(hidePreloader,2400);
@@ -1808,6 +1878,37 @@ if(window.matchMedia("(pointer:fine)").matches) {
   });
 } else {
   glow.style.display="none";
+}
+
+
+/* PLAYER CURSOR SPOTLIGHT */
+
+const playerCards=document.querySelectorAll(".player");
+const hasFinePointer=window.matchMedia("(hover:hover) and (pointer:fine)").matches;
+
+if(hasFinePointer) {
+  playerCards.forEach(player=>{
+    function moveSpotlight(event) {
+      const rect=player.getBoundingClientRect();
+
+      const x=event.clientX-rect.left;
+      const y=event.clientY-rect.top;
+
+      player.style.setProperty("--spot-x",x+"px");
+      player.style.setProperty("--spot-y",y+"px");
+    }
+
+    player.addEventListener("pointerenter",event=>{
+      moveSpotlight(event);
+      player.classList.add("spotlight-active");
+    });
+
+    player.addEventListener("pointermove",moveSpotlight);
+
+    player.addEventListener("pointerleave",()=>{
+      player.classList.remove("spotlight-active");
+    });
+  });
 }
 
 
